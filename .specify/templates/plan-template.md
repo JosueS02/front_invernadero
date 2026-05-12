@@ -31,7 +31,13 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- Frontend uses React + TypeScript with explicit typing in critical flows.
+- Backend uses Spring Boot 3 on Java 17 for all new server-side features.
+- Data persistence for business entities uses PostgreSQL with versioned migrations.
+- API contracts are defined/updated in OpenAPI 3 and exposed via Swagger.
+- Test strategy includes unit + integration + E2E coverage proportional to risk.
+- Accessibility and UX consistency impact is evaluated for all UI changes.
+- Plan includes documentation updates when architecture/contracts are modified.
 
 ## Project Structure
 

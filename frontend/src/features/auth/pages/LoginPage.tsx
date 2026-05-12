@@ -1,0 +1,40 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthCard } from "../components/AuthCard";
+import { AuthForm } from "../components/AuthForm";
+import { AuthHeader } from "../components/AuthHeader";
+import type { AuthCredentials } from "../model/auth.types";
+import { saveUserSession } from "../../greenhouse/model/session.store";
+import { loginUser } from "../services/authApi";
+
+export function LoginPage() {
+  const navigate = useNavigate();
+  const [apiError, setApiError] = useState("");
+
+  async function onSuccess(credentials: AuthCredentials) {
+    setApiError("");
+    try {
+      const user = await loginUser(credentials);
+      saveUserSession({ id: user.id, email: user.email });
+      navigate("/inicio");
+    } catch (error) {
+      setApiError(error instanceof Error ? error.message : "No se pudo iniciar sesion");
+    }
+  }
+
+  return (
+    <main className="auth-page" aria-label="Pagina login">
+      <AuthCard>
+        <AuthHeader title="Login" />
+        <AuthForm
+          submitLabel="Iniciar Sesion"
+          onSuccess={(credentials) => void onSuccess(credentials)}
+          bottomText="Crear Usuario"
+          onBottomAction={() => navigate("/crear-usuario")}
+          bottomAriaLabel="Ir a crear usuario"
+        />
+        {apiError ? <p className="field-error">{apiError}</p> : null}
+      </AuthCard>
+    </main>
+  );
+}

@@ -1,50 +1,81 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report
+- Version change: 1.0.0 -> 1.1.0
+- Modified principles:
+	- I. React Component-First Architecture -> I. Full-Stack Architecture by Domain
+	- II. Type Safety and Contract Clarity -> II. Type Safety and API Contract Clarity
+	- III. Testing as a Quality Gate (Non-Negotiable) -> III. Testing as a Delivery Gate (Non-Negotiable)
+	- V. Performance and Simplicity by Default -> V. Simplicity, Performance and Operability by Default
+- Added sections: None
+- Removed sections: None
+- Templates requiring updates:
+	- ✅ updated: .specify/templates/plan-template.md
+	- ✅ updated: .specify/templates/spec-template.md
+	- ✅ updated: .specify/templates/tasks-template.md
+	- ✅ updated: .github/copilot-instructions.md
+	- ✅ not applicable (directory not present): .specify/templates/commands/*.md
+- Follow-up TODOs: None
+-->
+
+# FrontReact Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Full-Stack Architecture by Domain
+Cada funcionalidad MUST definirse por dominio y abarcar sus capas de frontend y backend cuando aplique. En frontend, la UI se construye con componentes React reutilizables, pequeños y de responsabilidad clara. En backend, los servicios MUST implementarse con Spring Boot 3 sobre Java 17. La composición y separación de responsabilidades prevalecen sobre soluciones acopladas entre capas.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Type Safety and API Contract Clarity
+El proyecto usa TypeScript en frontend y tipado explícito en backend mediante DTOs y contratos claros. Todo flujo crítico (props, respuestas de API, estado compartido, formularios, payloads HTTP) MUST estar tipado y validado explícitamente. Se prohíbe el uso de `any` en código nuevo salvo casos excepcionales documentados en el PR.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+Toda API HTTP MUST tener contrato OpenAPI 3 actualizado y visible mediante Swagger para habilitar descubribilidad, pruebas y alineación entre frontend y backend.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### III. Testing as a Delivery Gate (Non-Negotiable)
+Todo cambio funcional requiere pruebas proporcionadas al riesgo: unitarias para lógica aislada, integración para interacción entre componentes, servicios y persistencia, y E2E para flujos críticos de usuario. No se acepta una feature sin evidencia de pruebas pasando en CI tanto para frontend como para backend.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### IV. Accessibility and UX Consistency
+La accesibilidad es un requerimiento base, no opcional. Se deben respetar semántica HTML, navegación por teclado, etiquetas accesibles y contraste suficiente. La UI debe seguir un sistema de diseño consistente (tokens, espaciado, tipografía y estados de interacción).
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### V. Simplicity, Performance and Operability by Default
+Se optimiza primero la experiencia percibida: carga inicial rápida, renderizados predecibles y uso racional de estado global. En backend, se priorizan endpoints simples, observables y con manejo consistente de errores. Se favorecen soluciones mantenibles (YAGNI). Toda complejidad adicional debe justificarse con datos o una necesidad clara del producto.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+## Technical Standards
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+- Stack base obligatorio: React + TypeScript (frontend) y Spring Boot 3 + Java 17 (backend).
+- Persistencia obligatoria de negocio: PostgreSQL.
+- Documentacion de API obligatoria: OpenAPI 3 con Swagger.
+- Gestión de estado: primero estado local; estado global solo cuando exista necesidad transversal real.
+- Datos remotos: se deben centralizar patrones de fetching, caché y manejo de errores.
+- Cambios de modelo persistente MUST incluir migraciones versionadas y estrategia de rollback.
+- Estructura: organización por features o dominios, evitando carpetas genéricas sin contexto de negocio.
+- Seguridad frontend: nunca exponer secretos en cliente; validar entradas y manejar errores sin filtrar datos sensibles.
+- Seguridad backend: validación de entradas, sanitización, manejo de excepciones, y configuración segura de acceso a base de datos.
+- Calidad: lint y formateo automatizados, sin warnings críticos en ramas listas para merge.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## Development Workflow and Quality Gates
+
+- Todo trabajo parte de una especificación clara (objetivo, alcance, criterios de aceptación).
+- Cada PR debe incluir: resumen técnico, evidencia de pruebas y evaluación de impacto en UX/accesibilidad y contratos API.
+- Revisión mínima de código por otro integrante antes de merge a rama principal.
+- No se permite merge si fallan build, tests o validaciones de calidad definidas en CI.
+- Cambios que afecten arquitectura, contratos o patrones comunes requieren actualización de documentación.
+- Todo cambio de endpoint MUST reflejarse en OpenAPI/Swagger dentro del mismo cambio.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+Esta constitución prevalece sobre prácticas no documentadas del equipo.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+Proceso de enmienda:
+1. Toda propuesta de cambio MUST describir alcance, motivación e impacto.
+2. Se requiere acuerdo explícito del equipo mantenedor antes de aprobar.
+3. Toda enmienda MUST actualizar versión y fecha de modificación.
+
+Política de versionado:
+- MAJOR: eliminación o redefinición incompatible de principios.
+- MINOR: nuevos principios, secciones o ampliaciones normativas.
+- PATCH: aclaraciones editoriales sin cambio normativo.
+
+Revisión de cumplimiento:
+- Cada PR y cada revisión técnica MUST validar cumplimiento explícito de esta constitución.
+- Toda excepción MUST quedar registrada con plan de mitigación y fecha de retiro.
+
+**Version**: 1.1.0 | **Ratified**: 2026-04-06 | **Last Amended**: 2026-04-08
