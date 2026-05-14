@@ -53,7 +53,7 @@ async function parseApiError(response: Response): Promise<string> {
 }
 
 export async function createGreenhouse(payload: CreateGreenhousePayload): Promise<void> {
-  const response = await fetch(`${API_BASE_URL}/api/greenhouses`, {
+  const response = await fetch(`${API_BASE_URL}/api/invernaderos`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
@@ -65,7 +65,7 @@ export async function createGreenhouse(payload: CreateGreenhousePayload): Promis
 }
 
 export async function listGreenhousesByUser(userId: string): Promise<GreenhouseApiResponse[]> {
-  const response = await fetch(`${API_BASE_URL}/api/greenhouses?userId=${encodeURIComponent(userId)}`, {
+  const response = await fetch(`${API_BASE_URL}/api/invernaderos?userId=${encodeURIComponent(userId)}`, {
     cache: "no-store"
   });
 
@@ -87,7 +87,7 @@ export async function listGreenhousesByUserPaged(
     size: String(size)
   });
 
-  const response = await fetch(`${API_BASE_URL}/api/greenhouses?${query.toString()}`, {
+  const response = await fetch(`${API_BASE_URL}/api/invernaderos?${query.toString()}`, {
     cache: "no-store"
   });
 
@@ -106,7 +106,7 @@ export async function listGreenhousesByUserPaged(
 }
 
 export async function updateGreenhouse(id: string, payload: UpdateGreenhousePayload): Promise<GreenhouseApiResponse> {
-  const response = await fetch(`${API_BASE_URL}/api/greenhouses/${encodeURIComponent(id)}`, {
+  const response = await fetch(`${API_BASE_URL}/api/invernaderos/${encodeURIComponent(id)}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
